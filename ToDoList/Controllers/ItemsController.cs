@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ToDoList.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace ToDoList.Controllers
 {
@@ -107,5 +108,19 @@ namespace ToDoList.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
+
+    [HttpPost]
+    public ActionResult SaveCheck(List<Item> model)
+    {
+      foreach (Item item in model)
+      {
+        var i = _db.Items.FirstOrDefault(x => x.ItemId == item.ItemId);
+        i.Checked = item.Checked;
+        _db.Entry(i).State = EntityState.Modified;
+      }
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+
+    }
   }
-}
